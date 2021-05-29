@@ -1,0 +1,11 @@
+query MyProducts {
+	myProducts {
+		id
+		label
+		coast
+		amount
+		value
+		class
+		productImage
+	}
+}

@@ -1,0 +1,43 @@
+{
+	"name": "your-farmer-server",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"watch": "tsc -w",
+		"dev": "nodemon dist/index.js",
+		"start": "node dist/index.js",
+		"typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
+	},
+	"devDependencies": {
+		"@types/connect-redis": "^0.0.16",
+		"@types/express": "^4.17.11",
+		"@types/express-session": "^1.17.3",
+		"@types/graphql": "^14.5.0",
+		"@types/node": "^15.6.1",
+		"@types/nodemailer": "^6.4.2",
+		"@types/redis": "^2.8.28",
+		"nodemon": "^2.0.7",
+		"ts-node": "^10.0.0",
+		"typescript": "^4.2.4"
+	},
+	"dependencies": {
+		"apollo-server-express": "^2.24.1",
+		"argon2": "^0.27.2",
+		"connect-redis": "^5.2.0",
+		"cors": "^2.8.5",
+		"dotenv": "^10.0.0",
+		"dotenv-safe": "^8.2.0",
+		"express": "^4.17.1",
+		"express-session": "^1.17.2",
+		"graphql": "^15.5.0",
+		"ioredis": "^4.27.3",
+		"nodemailer": "^6.6.1",
+		"pg": "^8.6.0",
+		"redis": "^3.1.2",
+		"reflect-metadata": "^0.1.13",
+		"type-graphql": "^1.1.1",
+		"typeorm": "^0.2.32"
+	}
+}

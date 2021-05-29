@@ -1,0 +1,14 @@
+/your-farmer/node_modules
+/your-farmer/.next/
+/your-farmer/out/
+/your-farmer/.pnp
+/your-farmer/.pnp.js
+/your-farmer/build
+/your-farmer/yarn-debug.log*
+/your-farmer/yarn-error.log*
+/your-farmer-server/node_modules
+/your-farmer-server/dist
+/your-farmer-server/.env
+/your-farmer-server/yarn-error.log*
+/your-farmer-server/yarn-debug.log*
+.vscode

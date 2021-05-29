@@ -1,0 +1,7 @@
+mutation Product($productId: Int!) {
+	product(productId: $productId) {
+		label
+		amount
+		coast
+	}
+}

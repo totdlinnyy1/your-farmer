@@ -1,0 +1,27 @@
+mutation CreateProduct(
+	$label: String!
+	$amount: String!
+	$coast: Int!
+	$class: String!
+	$value: String!
+	$productImage: String
+) {
+	createProduct(
+		options: {
+			label: $label
+			amount: $amount
+			coast: $coast
+			class: $class
+			value: $value
+			productImage: $productImage
+		}
+	) {
+		label
+		id
+		ownerId
+		coast
+		amount
+		class
+		value
+	}
+}

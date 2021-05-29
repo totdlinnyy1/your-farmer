@@ -1,0 +1,6 @@
+mutation UpdateProduct($productId: Int!, $coast: Int!) {
+	updateProduct(productId: $productId, coast: $coast) {
+		id
+		coast
+	}
+}
