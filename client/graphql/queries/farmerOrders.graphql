@@ -1,0 +1,24 @@
+query GetAllFarmerOrders {
+	getAllFarmerOrders {
+		id
+		ownerId
+		products {
+			label
+			class
+			amount
+			coast
+			count
+		}
+		placemark {
+			address
+			coordinates
+		}
+		owner {
+			id
+			name
+			lastname
+			number
+			avatarUrl
+		}
+	}
+}

@@ -21,6 +21,11 @@ export const createUrqlClient = (ssrExchange: any) => ({
 	exchanges: [
 		dedupExchange,
 		cacheExchange({
+			keys: {
+				product: () => null,
+				Placemark: () => null,
+				FarmerProduct: () => null
+			},
 			updates: {
 				Mutation: {
 					logout: (_result, args, cache, info) => {

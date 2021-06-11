@@ -1,0 +1,8 @@
+mutation CreateFarmerOrder(
+	$products: [FarmerProductsInput!]!
+	$placemark: PlacemarkInput!
+) {
+	createFarmerOrder(products: $products, placemark: $placemark) {
+		id
+	}
+}

@@ -1,3 +1,6 @@
 export { default as Layout } from './Layout/containers/Layout'
 export { default as CreateProduct } from './CreateProduct/containers/CreateProduct'
 export { default as FarmerMap } from './FarmerMap/containers'
+export { default as BuyerMap } from './BuyerMap/containers'
+export { default as FarmerAddToMap } from './AddToMap/containers/FarmerAddToMap'
+export { default as BuyerAddToMap } from './AddToMap/containers/BuyerAddToMap'

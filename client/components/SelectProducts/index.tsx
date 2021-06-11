@@ -40,7 +40,7 @@ const SelectProduct: FC<Props> = ({ disabled, onChange, isMulti, value }) => {
 
 	return (
 		<Select
-			placeholder='Выберете продукт'
+			placeholder={isMulti ? 'Выберете продукты' : 'Выберете продукт'}
 			isMulti={isMulti}
 			isDisabled={disabled}
 			options={groupedOptions}

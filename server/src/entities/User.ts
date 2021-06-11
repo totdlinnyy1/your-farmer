@@ -8,6 +8,8 @@ import {
 	BaseEntity,
 	OneToMany
 } from 'typeorm'
+import { FarmerOrder } from './FarmerOrder'
+import { Order } from './Order'
 import { Product } from './Product'
 
 @ObjectType()
@@ -46,6 +48,12 @@ export class User extends BaseEntity {
 
 	@OneToMany(() => Product, product => product.owner)
 	products: Product[]
+
+	@OneToMany(() => FarmerOrder, order => order.owner)
+	farmerOrders: FarmerOrder[]
+
+	@OneToMany(() => Order, order => order.owner)
+	orders: Order[]
 
 	@Field(() => String)
 	@CreateDateColumn()

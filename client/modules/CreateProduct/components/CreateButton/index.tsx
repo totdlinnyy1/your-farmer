@@ -32,7 +32,7 @@ interface SubmitData {
 const CreateButton: FC = () => {
 	const { isOpen, onClose, onOpen } = useDisclosure()
 
-	const [product, setProduct] = useState<Product | null>(null)
+	const [product, setProduct] = useState<Product>()
 
 	const [productError, setProductError] = useState<boolean>(false)
 

@@ -17,7 +17,7 @@ import {
 import { BiShow, BiHide } from 'react-icons/bi'
 import { useLoginMutation } from '../../generated/graphql'
 
-type FormData = {
+interface SubmitData {
 	email: string
 	password: string
 }
@@ -29,13 +29,13 @@ const SignInForm: FC = () => {
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting }
-	} = useForm<FormData>()
+	} = useForm<SubmitData>()
 
 	const [, signin] = useLoginMutation()
 
 	const toast = useToast()
 
-	const onSubmit: SubmitHandler<FormData> = async data => {
+	const onSubmit: SubmitHandler<SubmitData> = async data => {
 		const response = await signin(data)
 		console.log(response)
 

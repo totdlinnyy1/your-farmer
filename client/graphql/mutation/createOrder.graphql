@@ -1,0 +1,8 @@
+mutation CreateOrder(
+	$products: [ProductsInput!]!
+	$placemark: PlacemarkInput!
+) {
+	createOrder(products: $products, placemark: $placemark) {
+		id
+	}
+}

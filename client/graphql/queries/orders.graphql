@@ -1,0 +1,22 @@
+query GetAllOrders {
+	getAllOrders {
+		id
+		owner {
+			id
+			name
+			lastname
+			number
+			avatarUrl
+		}
+		products {
+			label
+			amount
+			class
+			count
+		}
+		placemark {
+			address
+			coordinates
+		}
+	}
+}

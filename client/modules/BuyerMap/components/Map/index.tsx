@@ -1,17 +1,17 @@
-import { FC, useState, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import {
 	YMaps,
 	Map,
 	SearchControl,
 	ZoomControl,
-	Clusterer,
-	Placemark
+	Placemark,
+	Clusterer
 } from 'react-yandex-maps'
 import { Box } from '@chakra-ui/react'
-import { GetAllOrdersQuery } from '../../../../generated/graphql'
+import { GetAllFarmerOrdersQuery } from '../../../../generated/graphql'
 
 interface Props {
-	orders?: GetAllOrdersQuery
+	orders?: GetAllFarmerOrdersQuery
 	focusPlacemark: number[]
 	setFocusOrder: (orderId: number) => void
 }
@@ -36,7 +36,7 @@ const MapComponent: FC<Props> = ({ orders, focusPlacemark, setFocusOrder }) => {
 					<SearchControl options={{ noPlacemark: true }} />
 					<ZoomControl />
 					<Clusterer>
-						{orders?.getAllOrders.map(order => (
+						{orders?.getAllFarmerOrders.map(order => (
 							<Placemark
 								defaultGeometry={order.placemark.coordinates}
 								key={order.id}

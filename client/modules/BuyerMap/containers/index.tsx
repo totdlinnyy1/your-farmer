@@ -4,28 +4,29 @@ import {
 	Box,
 	Text,
 	Button,
+	useDisclosure,
+	HStack,
 	Avatar,
 	Table,
-	HStack,
 	Thead,
-	Tbody,
 	Tr,
 	Th,
+	Tbody,
 	Td
 } from '@chakra-ui/react'
 import { FC, useState } from 'react'
 import { MapComponent, OrdersList } from '../components'
-import { useGetAllOrdersQuery } from '../../../generated/graphql'
-import { MoreAboutOrderProps } from '../../../types/moreAboutOrder'
+import { useGetAllFarmerOrdersQuery } from '../../../generated/graphql'
 import { ModalWindow } from '../../../components'
+import { MoreAboutOrderProps } from '../../../types/moreAboutOrder'
 
-const FarmerMap: FC = () => {
+const BuyerMap: FC = () => {
 	const [focusPlacemark, setFocusPlacemark] = useState<number[]>([])
 	const [focusOrder, setFocusOrder] = useState<number>()
 	const [moreAboutOrder, setMoreAboutOrder] = useState<MoreAboutOrderProps>()
 	const [showNumber, setShowNumber] = useState<boolean>(false)
 	const [isOpen, setIsOpen] = useState<boolean>(false)
-	const [{ fetching, data }] = useGetAllOrdersQuery()
+	const [{ fetching, data }] = useGetAllFarmerOrdersQuery()
 	const onOpen = () => setIsOpen(true)
 	const onClose = () => {
 		setIsOpen(false)
@@ -35,14 +36,14 @@ const FarmerMap: FC = () => {
 	return (
 		<Box my='40px'>
 			<Text fontSize='3xl' textAlign='center' my='20px'>
-				Заказы покупателей
+				Продукты фермеров
 			</Text>
 			<Flex h='600px' bg='gray.100' border='2px dashed red' borderRadius='4px'>
 				<Box w='70%'>
 					<MapComponent
+						orders={data}
 						focusPlacemark={focusPlacemark}
 						setFocusOrder={setFocusOrder}
-						orders={data}
 					/>
 				</Box>
 				<Box w='30%' h='600px' py={3}>
@@ -58,15 +59,15 @@ const FarmerMap: FC = () => {
 								orders={data}
 								setFocusPlacemark={setFocusPlacemark}
 								focusOrder={focusOrder}
-								setMoreAboutOrder={setMoreAboutOrder}
 								setFocusOrder={setFocusOrder}
+								setMoreAboutOrder={setMoreAboutOrder}
 								onOpen={onOpen}
 							/>
 						</Box>
 						<Box m='0 auto'>
 							<Link href='/new'>
 								<a>
-									<Button colorScheme='purple'>Добавить товары на карту</Button>
+									<Button colorScheme='purple'>Сделать заказ</Button>
 								</a>
 							</Link>
 						</Box>
@@ -107,7 +108,8 @@ const FarmerMap: FC = () => {
 									<Tr>
 										<Th>#</Th>
 										<Th>Продукт</Th>
-										<Th>Количество</Th>
+										<Th>Цена</Th>
+										<Th>Кол..</Th>
 									</Tr>
 								</Thead>
 								<Tbody>
@@ -115,6 +117,7 @@ const FarmerMap: FC = () => {
 										<Tr key={key}>
 											<Td>{key + 1}</Td>
 											<Td>{product.label}</Td>
+											<Td>{`${product.coast} р/${product.amount}`}</Td>
 											<Td>{`${product.count} ${product.amount}`}</Td>
 										</Tr>
 									))}
@@ -128,4 +131,4 @@ const FarmerMap: FC = () => {
 	)
 }
 
-export default FarmerMap
+export default BuyerMap

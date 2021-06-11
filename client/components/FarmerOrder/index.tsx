@@ -6,11 +6,11 @@ import {
 	HStack,
 	Text,
 	Button,
+	OrderedList,
+	ListItem,
 	Tag,
 	TagLeftIcon,
-	TagLabel,
-	OrderedList,
-	ListItem
+	TagLabel
 } from '@chakra-ui/react'
 import { FC } from 'react'
 import { MdPlace } from 'react-icons/md'
@@ -20,10 +20,10 @@ import { MoreAboutOrderProps } from '../../types/moreAboutOrder'
 
 interface Props {
 	owner: {
-		id: number
 		avatarUrl?: string | null
 		name: string
 		lastname: string
+		id: number
 		number: string
 	}
 	onOpen: () => void
@@ -36,15 +36,15 @@ interface Props {
 	orderId: number
 }
 
-const Order: FC<Props> = ({
+const FarmerOrder: FC<Props> = ({
 	owner,
-	focusId,
-	orderId,
-	setFocusOrder,
-	setFocusPlacemark,
 	placemark,
 	products,
+	setFocusPlacemark,
+	setFocusOrder,
 	setMoreAboutOrder,
+	focusId,
+	orderId,
 	onOpen
 }) => {
 	return (
@@ -101,4 +101,4 @@ const Order: FC<Props> = ({
 	)
 }
 
-export default Order
+export default FarmerOrder

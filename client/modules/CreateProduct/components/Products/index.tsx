@@ -32,9 +32,8 @@ const Products: FC = () => {
 						shouldWrapChildren
 					>
 						{data.myProducts.map(product => (
-							<Box margin='20px 30px'>
+							<Box margin='20px 30px' key={product.id}>
 								<Product
-									key={product.id}
 									editable={true}
 									label={product.label}
 									coast={product.coast}

@@ -15,6 +15,10 @@ import { ProductResolver } from './resolvers/product'
 import { User } from './entities/User'
 import { UserResolver } from './resolvers/user'
 import { MyContext } from './types'
+import { FarmerOrder } from './entities/FarmerOrder'
+import { FarmerOrderResolver } from './resolvers/farmerorder'
+import { Order } from './entities/Order'
+import { OrderResolver } from './resolvers/order'
 
 const PORT = process.env.PORT || 4000
 
@@ -22,11 +26,10 @@ const main = async () => {
 	await createConnection({
 		type: 'postgres',
 		url: process.env.DATABASE_URL,
+		synchronize: true,
 		logging: true,
-		// synchronize: true,
 		migrations: [path.join(__dirname, './migrations/*')],
-		entities: [Product, User],
-		synchronize: true
+		entities: [Product, User, FarmerOrder, Order]
 	})
 
 	const app = express()
@@ -43,10 +46,6 @@ const main = async () => {
 		host: process.env.REDIS_URL,
 		password: process.env.REDIS_PASSWORD,
 		port: 13003
-	})
-
-	redisClient.on('error', function (error) {
-		console.log(error)
 	})
 
 	app.use(
@@ -70,7 +69,12 @@ const main = async () => {
 
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
-			resolvers: [ProductResolver, UserResolver],
+			resolvers: [
+				ProductResolver,
+				UserResolver,
+				FarmerOrderResolver,
+				OrderResolver
+			],
 			validate: false
 		}),
 		context: ({ req, res }): MyContext => ({ req, res })
