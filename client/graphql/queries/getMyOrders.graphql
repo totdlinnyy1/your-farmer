@@ -1,0 +1,14 @@
+query GetMyOrders {
+	getMyOrders {
+		id
+		status
+		products {
+			label
+			amount
+			count
+		}
+		placemark {
+			address
+		}
+	}
+}

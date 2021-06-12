@@ -8,21 +8,23 @@ import {
 	Text
 } from '@chakra-ui/react'
 import Link from 'next/link'
+import { useState } from 'react'
 import { FC } from 'react'
 import isFarmer from '../../helpers/isFarmer'
 import role from '../../helpers/role'
 
 interface UserInfoProps {
 	user: {
-		avatarUrl: string | null
+		avatarUrl?: string | null
 		name: string
 		lastname: string
 		role: string
 		number: string
-		editable: boolean
 	}
+	editable: boolean
 }
-const UserInfo: FC<UserInfoProps> = ({ user }) => {
+const UserInfo: FC<UserInfoProps> = ({ user, editable }) => {
+	const [showNumber, setShowNumber] = useState<boolean>(false)
 	return (
 		<Flex justifyContent='center'>
 			<Box mr={5}>
@@ -34,7 +36,7 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
 						loading='lazy'
 					/>
 				</Box>
-				{user.editable && (
+				{editable && (
 					<Box>
 						<Link href='/profile/edit'>
 							<a>
@@ -55,44 +57,40 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
 						<Text>Роль: {role(user.role)}</Text>
 					</Box>
 					<Box>
-						<Text>Номер телефона: +7{user.number}</Text>
+						<HStack minH='40px'>
+							<Text>Номер телефона:</Text>
+							{showNumber || editable ? (
+								<Text>+7{user.number}</Text>
+							) : (
+								<Button onClick={() => setShowNumber(true)}>Показать</Button>
+							)}
+						</HStack>
 					</Box>
 				</Box>
 				<Box>
-					<HStack spacing='20px'>
-						{isFarmer(user.role) && (
+					{isFarmer(user.role) && (
+						<HStack spacing='20px'>
 							<Box textAlign='center'>
 								<Text fontSize='2xl' color='red'>
 									0
 								</Text>
 								<Text>товаров</Text>
 							</Box>
-						)}
-						<Box textAlign='center'>
-							<Text fontSize='2xl' color='red'>
-								0
-							</Text>
-							<Text>
-								{isFarmer(user.role) ? 'Товаров' : 'Заказов'} на карте
-							</Text>
-						</Box>
-						{isFarmer(user.role) && (
+
 							<Box textAlign='center'>
 								<Text fontSize='2xl' color='red'>
 									0
 								</Text>
 								<Text>отзывов</Text>
 							</Box>
-						)}
-						{isFarmer(user.role) && (
 							<Box textAlign='center'>
 								<Text fontSize='2xl' color='red'>
 									0
 								</Text>
-								<Text>ваш рейтиг</Text>
+								<Text>рейтинг</Text>
 							</Box>
-						)}
-					</HStack>
+						</HStack>
+					)}
 				</Box>
 			</VStack>
 		</Flex>

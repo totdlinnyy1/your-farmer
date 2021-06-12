@@ -1,0 +1,15 @@
+query GetUser($id: Int!) {
+	getUser(id: $id) {
+		user {
+			id
+			name
+			lastname
+			number
+			role
+			avatarUrl
+		}
+		errors {
+			message
+		}
+	}
+}

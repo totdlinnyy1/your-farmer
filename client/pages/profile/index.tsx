@@ -6,7 +6,14 @@ import UserInfo from '../../components/UserInfo'
 import { useMeQuery } from '../../generated/graphql'
 import isFarmer from '../../helpers/isFarmer'
 import { isServer } from '../../helpers/isServer'
-import { BuyerMap, CreateProduct, FarmerMap, Layout } from '../../modules'
+import {
+	BuyerMap,
+	CreateProduct,
+	FarmerMap,
+	Layout,
+	FarmerOrders,
+	BuyerOrders
+} from '../../modules'
 import { createUrqlClient } from '../../utils/createUrqlClient'
 
 const Profile: NextPage = () => {
@@ -24,18 +31,20 @@ const Profile: NextPage = () => {
 							lastname: data.me.lastname,
 							avatarUrl: data.me.avatarUrl as string | null,
 							role: data.me.role,
-							number: data.me.number,
-							editable: true
+							number: data.me.number
 						}}
+						editable={true}
 					/>
 					{isFarmer(data.me.role) ? (
 						<Box>
 							<FarmerMap />
 							<CreateProduct />
+							<FarmerOrders />
 						</Box>
 					) : (
 						<Box>
 							<BuyerMap />
+							<BuyerOrders />
 						</Box>
 					)}
 				</Container>

@@ -60,6 +60,13 @@ export class FarmerOrderResolver {
 	async getAllFarmerOrders(): Promise<FarmerOrder[]> {
 		return FarmerOrder.createQueryBuilder('o')
 			.innerJoinAndSelect('o.owner', 'u', 'u.id = o."ownerId"')
+			.andWhere('o.status = :status', { status: 'show' })
 			.getMany()
+	}
+
+	@Query(() => [FarmerOrder])
+	@UseMiddleware(isAuth)
+	async getMyFarmerOrders(@Ctx() { req }: MyContext): Promise<FarmerOrder[]> {
+		return FarmerOrder.find({ where: { ownerId: req.session.userId } })
 	}
 }

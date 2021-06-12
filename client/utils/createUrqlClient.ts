@@ -24,7 +24,9 @@ export const createUrqlClient = (ssrExchange: any) => ({
 			keys: {
 				product: () => null,
 				Placemark: () => null,
-				FarmerProduct: () => null
+				FarmerProduct: () => null,
+				UserResponse: () => null,
+				FarmerOrder: () => null
 			},
 			updates: {
 				Mutation: {

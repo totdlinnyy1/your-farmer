@@ -1,0 +1,15 @@
+query GetMyFarmerOrders {
+	getMyFarmerOrders {
+		id
+		status
+		products {
+			label
+			amount
+			count
+			coast
+		}
+		placemark {
+			address
+		}
+	}
+}

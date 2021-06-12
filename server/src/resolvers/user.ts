@@ -4,6 +4,7 @@ import {
 	Ctx,
 	Field,
 	InputType,
+	Int,
 	Mutation,
 	ObjectType,
 	Query,
@@ -172,5 +173,22 @@ export class UserResolver {
 				resolve(true)
 			})
 		)
+	}
+
+	@Query(() => UserResponse)
+	async getUser(@Arg('id', () => Int) id: number): Promise<UserResponse> {
+		const user = await User.findOne({ id })
+		if (!user) {
+			return {
+				errors: [
+					{
+						message: 'Такой пользователь не найден'
+					}
+				]
+			}
+		}
+		return {
+			user
+		}
 	}
 }

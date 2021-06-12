@@ -59,6 +59,10 @@ export class FarmerOrder extends BaseEntity {
 	products!: FarmerProduct[]
 
 	@Field(() => String)
+	@Column('text', { default: 'show' })
+	status: string
+
+	@Field(() => String)
 	@CreateDateColumn()
 	createdAt: Date
 

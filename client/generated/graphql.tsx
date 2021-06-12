@@ -30,6 +30,7 @@ export type FarmerOrder = {
 	owner: User
 	placemark: Placemark
 	products: Array<FarmerProduct>
+	status: Scalars['String']
 	createdAt: Scalars['String']
 	updatedAt: Scalars['String']
 }
@@ -115,6 +116,7 @@ export type Order = {
 	owner: User
 	placemark: Placemark
 	products: Array<Product>
+	status: Scalars['String']
 	createdAt: Scalars['String']
 	updatedAt: Scalars['String']
 }
@@ -166,8 +168,15 @@ export type Query = {
 	products: Array<Product>
 	myProducts: Array<Product>
 	me?: Maybe<User>
+	getUser: UserResponse
 	getAllFarmerOrders: Array<FarmerOrder>
+	getMyFarmerOrders: Array<FarmerOrder>
 	getAllOrders: Array<Order>
+	getMyOrders: Array<Order>
+}
+
+export type QueryGetUserArgs = {
+	id: Scalars['Int']
 }
 
 export type RegisterInput = {
@@ -331,6 +340,56 @@ export type GetAllFarmerOrdersQuery = { __typename?: 'Query' } & {
 				>
 			}
 	>
+}
+
+export type GetMyFarmerOrdersQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetMyFarmerOrdersQuery = { __typename?: 'Query' } & {
+	getMyFarmerOrders: Array<
+		{ __typename?: 'FarmerOrder' } & Pick<FarmerOrder, 'id' | 'status'> & {
+				products: Array<
+					{ __typename?: 'FarmerProduct' } & Pick<
+						FarmerProduct,
+						'label' | 'amount' | 'count' | 'coast'
+					>
+				>
+				placemark: { __typename?: 'Placemark' } & Pick<Placemark, 'address'>
+			}
+	>
+}
+
+export type GetMyOrdersQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetMyOrdersQuery = { __typename?: 'Query' } & {
+	getMyOrders: Array<
+		{ __typename?: 'Order' } & Pick<Order, 'id' | 'status'> & {
+				products: Array<
+					{ __typename?: 'product' } & Pick<
+						Product,
+						'label' | 'amount' | 'count'
+					>
+				>
+				placemark: { __typename?: 'Placemark' } & Pick<Placemark, 'address'>
+			}
+	>
+}
+
+export type GetUserQueryVariables = Exact<{
+	id: Scalars['Int']
+}>
+
+export type GetUserQuery = { __typename?: 'Query' } & {
+	getUser: { __typename?: 'UserResponse' } & {
+		user?: Maybe<
+			{ __typename?: 'User' } & Pick<
+				User,
+				'id' | 'name' | 'lastname' | 'number' | 'role' | 'avatarUrl'
+			>
+		>
+		errors?: Maybe<
+			Array<{ __typename?: 'ErrorField' } & Pick<ErrorField, 'message'>>
+		>
+	}
 }
 
 export type MeQueryVariables = Exact<{ [key: string]: never }>
@@ -599,6 +658,83 @@ export function useGetAllFarmerOrdersQuery(
 		query: GetAllFarmerOrdersDocument,
 		...options
 	})
+}
+export const GetMyFarmerOrdersDocument = gql`
+	query GetMyFarmerOrders {
+		getMyFarmerOrders {
+			id
+			status
+			products {
+				label
+				amount
+				count
+				coast
+			}
+			placemark {
+				address
+			}
+		}
+	}
+`
+
+export function useGetMyFarmerOrdersQuery(
+	options: Omit<
+		Urql.UseQueryArgs<GetMyFarmerOrdersQueryVariables>,
+		'query'
+	> = {}
+) {
+	return Urql.useQuery<GetMyFarmerOrdersQuery>({
+		query: GetMyFarmerOrdersDocument,
+		...options
+	})
+}
+export const GetMyOrdersDocument = gql`
+	query GetMyOrders {
+		getMyOrders {
+			id
+			status
+			products {
+				label
+				amount
+				count
+			}
+			placemark {
+				address
+			}
+		}
+	}
+`
+
+export function useGetMyOrdersQuery(
+	options: Omit<Urql.UseQueryArgs<GetMyOrdersQueryVariables>, 'query'> = {}
+) {
+	return Urql.useQuery<GetMyOrdersQuery>({
+		query: GetMyOrdersDocument,
+		...options
+	})
+}
+export const GetUserDocument = gql`
+	query GetUser($id: Int!) {
+		getUser(id: $id) {
+			user {
+				id
+				name
+				lastname
+				number
+				role
+				avatarUrl
+			}
+			errors {
+				message
+			}
+		}
+	}
+`
+
+export function useGetUserQuery(
+	options: Omit<Urql.UseQueryArgs<GetUserQueryVariables>, 'query'> = {}
+) {
+	return Urql.useQuery<GetUserQuery>({ query: GetUserDocument, ...options })
 }
 export const MeDocument = gql`
 	query Me {
