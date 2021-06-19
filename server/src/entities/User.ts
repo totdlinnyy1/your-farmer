@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from 'type-graphql'
+import { Field, Float, Int, ObjectType } from 'type-graphql'
 import {
 	Entity,
 	Column,
@@ -11,6 +11,7 @@ import {
 import { FarmerOrder } from './FarmerOrder'
 import { Order } from './Order'
 import { Product } from './Product'
+import { Review } from './Review'
 
 @ObjectType()
 @Entity()
@@ -43,6 +44,17 @@ export class User extends BaseEntity {
 	@Column({ nullable: true })
 	avatarUrl?: string
 
+	@Column('float', { default: 0.0 })
+	rating: number
+
+	@Field(() => Float)
+	@Column('float', { default: 0.0 })
+	averageRating: number
+
+	@Field(() => Int)
+	@Column('int', { default: 0 })
+	reviewsCount: number
+
 	@Column()
 	hash!: string
 
@@ -54,6 +66,13 @@ export class User extends BaseEntity {
 
 	@OneToMany(() => Order, order => order.owner)
 	orders: Order[]
+
+	@OneToMany(() => Review, review => review.owner)
+	sendReviews: Review[]
+
+	@Field(() => [Review])
+	@OneToMany(() => Review, review => review.farmer)
+	reviews: Review[]
 
 	@Field(() => String)
 	@CreateDateColumn()

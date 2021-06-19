@@ -28,6 +28,7 @@ import { VscMenu } from 'react-icons/vsc'
 import MediaQuery from 'react-responsive'
 import { useLogoutMutation, useMeQuery } from '../../../../generated/graphql'
 import { isServer } from '../../../../helpers/isServer'
+import logo from '../../../../public/logo.png'
 
 const Header: FC = () => {
 	const { onOpen, onClose, isOpen } = useDisclosure()
@@ -49,7 +50,13 @@ const Header: FC = () => {
 							<a>
 								<HStack spacing='20px' align='center'>
 									<Box>
-										<Image src='/logo.png' width={100} height={80} />
+										<Image
+											src={logo}
+											placeholder='blur'
+											alt='logo'
+											width={100}
+											height={80}
+										/>
 									</Box>
 									<MediaQuery minDeviceWidth={360}>
 										<Box>

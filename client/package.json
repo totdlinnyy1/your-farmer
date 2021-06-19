@@ -17,14 +17,15 @@
 		"framer-motion": "^4.1.17",
 		"graphql": "^15.5.0",
 		"isomorphic-unfetch": "^3.1.0",
-		"next": "10.2.2",
+		"next": "^11.0.0",
 		"next-urql": "^3.1.0",
-		"react": "17.0.2",
-		"react-dom": "17.0.2",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
 		"react-hook-form": "^7.6.4",
 		"react-icons": "^4.2.0",
 		"react-input-mask": "^2.0.4",
 		"react-is": "^17.0.2",
+		"react-rating": "^2.0.5",
 		"react-responsive": "^8.2.0",
 		"react-select": "^4.3.1",
 		"react-yandex-maps": "^4.6.0",
@@ -38,6 +39,9 @@
 		"@graphql-codegen/typescript-urql": "^2.0.6",
 		"@types/react": "^17.0.6",
 		"@types/react-input-mask": "^3.0.0",
-		"@types/react-select": "^4.0.15"
+		"@types/react-select": "^4.0.15",
+		"eslint": "^7.28.0",
+		"eslint-config-next": "^11.0.0",
+		"typescript": "^4.3.2"
 	}
 }

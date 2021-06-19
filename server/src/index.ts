@@ -19,6 +19,8 @@ import { FarmerOrder } from './entities/FarmerOrder'
 import { FarmerOrderResolver } from './resolvers/farmerorder'
 import { Order } from './entities/Order'
 import { OrderResolver } from './resolvers/order'
+import { Review } from './entities/Review'
+import { ReviewResolver } from './resolvers/review'
 
 const PORT = process.env.PORT || 4000
 
@@ -29,7 +31,7 @@ const main = async () => {
 		synchronize: true,
 		logging: true,
 		migrations: [path.join(__dirname, './migrations/*')],
-		entities: [Product, User, FarmerOrder, Order]
+		entities: [Product, User, FarmerOrder, Order, Review]
 	})
 
 	const app = express()
@@ -73,7 +75,8 @@ const main = async () => {
 				ProductResolver,
 				UserResolver,
 				FarmerOrderResolver,
-				OrderResolver
+				OrderResolver,
+				ReviewResolver
 			],
 			validate: false
 		}),

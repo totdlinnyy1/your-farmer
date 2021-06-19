@@ -18,11 +18,6 @@ export type Scalars = {
 	Float: number
 }
 
-export type ErrorField = {
-	__typename?: 'ErrorField'
-	message: Scalars['String']
-}
-
 export type FarmerOrder = {
 	__typename?: 'FarmerOrder'
 	id: Scalars['Int']
@@ -67,11 +62,13 @@ export type Mutation = {
 	product: Product
 	updateProduct: Product
 	deleteProduct: Scalars['Boolean']
-	register: UserResponse
-	login: UserResponse
+	register: User
+	login: User
 	logout: Scalars['Boolean']
 	createFarmerOrder: FarmerOrder
 	createOrder: Order
+	createReview: Review
+	deleteReview: Scalars['Boolean']
 }
 
 export type MutationCreateProductArgs = {
@@ -107,6 +104,17 @@ export type MutationCreateFarmerOrderArgs = {
 export type MutationCreateOrderArgs = {
 	products: Array<ProductsInput>
 	placemark: PlacemarkInput
+}
+
+export type MutationCreateReviewArgs = {
+	mark: Scalars['Int']
+	farmerId: Scalars['Int']
+	text?: Maybe<Scalars['String']>
+}
+
+export type MutationDeleteReviewArgs = {
+	farmerId: Scalars['Int']
+	reviewId: Scalars['Int']
 }
 
 export type Order = {
@@ -167,16 +175,26 @@ export type Query = {
 	__typename?: 'Query'
 	products: Array<Product>
 	myProducts: Array<Product>
+	getFarmerProducts: Array<Product>
 	me?: Maybe<User>
 	getUser: UserResponse
 	getAllFarmerOrders: Array<FarmerOrder>
 	getMyFarmerOrders: Array<FarmerOrder>
 	getAllOrders: Array<Order>
 	getMyOrders: Array<Order>
+	getFarmerReviews: Array<Review>
+}
+
+export type QueryGetFarmerProductsArgs = {
+	farmerId: Scalars['Int']
 }
 
 export type QueryGetUserArgs = {
 	id: Scalars['Int']
+}
+
+export type QueryGetFarmerReviewsArgs = {
+	farmerId: Scalars['Int']
 }
 
 export type RegisterInput = {
@@ -188,6 +206,19 @@ export type RegisterInput = {
 	password: Scalars['String']
 }
 
+export type Review = {
+	__typename?: 'Review'
+	id: Scalars['Int']
+	text?: Maybe<Scalars['String']>
+	mark: Scalars['Int']
+	ownerId: Scalars['Int']
+	farmerId: Scalars['Int']
+	owner: User
+	farmer: User
+	createdAt: Scalars['String']
+	updatedAt: Scalars['String']
+}
+
 export type User = {
 	__typename?: 'User'
 	id: Scalars['Int']
@@ -197,14 +228,17 @@ export type User = {
 	number: Scalars['String']
 	role: Scalars['String']
 	avatarUrl?: Maybe<Scalars['String']>
+	averageRating: Scalars['Float']
+	reviewsCount: Scalars['Int']
+	reviews: Array<Review>
 	createdAt: Scalars['String']
 	updatedAt: Scalars['String']
 }
 
 export type UserResponse = {
 	__typename?: 'UserResponse'
-	errors?: Maybe<Array<ErrorField>>
-	user?: Maybe<User>
+	user: User
+	reviews?: Maybe<Array<Review>>
 }
 
 export type CreateFarmerOrderMutationVariables = Exact<{
@@ -241,6 +275,24 @@ export type CreateProductMutation = { __typename?: 'Mutation' } & {
 	>
 }
 
+export type CreateReviewMutationVariables = Exact<{
+	mark: Scalars['Int']
+	farmerId: Scalars['Int']
+	text?: Maybe<Scalars['String']>
+}>
+
+export type CreateReviewMutation = { __typename?: 'Mutation' } & {
+	createReview: { __typename?: 'Review' } & Pick<
+		Review,
+		'id' | 'farmerId' | 'text' | 'mark'
+	> & {
+			owner: { __typename?: 'User' } & Pick<
+				User,
+				'id' | 'name' | 'lastname' | 'avatarUrl'
+			>
+		}
+}
+
 export type DeleteProductMutationVariables = Exact<{
 	productId: Scalars['Int']
 }>
@@ -250,23 +302,33 @@ export type DeleteProductMutation = { __typename?: 'Mutation' } & Pick<
 	'deleteProduct'
 >
 
+export type DeleteReviewMutationVariables = Exact<{
+	reviewId: Scalars['Int']
+	farmerId: Scalars['Int']
+}>
+
+export type DeleteReviewMutation = { __typename?: 'Mutation' } & Pick<
+	Mutation,
+	'deleteReview'
+>
+
 export type LoginMutationVariables = Exact<{
 	email: Scalars['String']
 	password: Scalars['String']
 }>
 
 export type LoginMutation = { __typename?: 'Mutation' } & {
-	login: { __typename?: 'UserResponse' } & {
-		errors?: Maybe<
-			Array<{ __typename?: 'ErrorField' } & Pick<ErrorField, 'message'>>
-		>
-		user?: Maybe<
-			{ __typename?: 'User' } & Pick<
-				User,
-				'id' | 'name' | 'lastname' | 'email' | 'role' | 'number' | 'avatarUrl'
-			>
-		>
-	}
+	login: { __typename?: 'User' } & Pick<
+		User,
+		| 'id'
+		| 'name'
+		| 'lastname'
+		| 'email'
+		| 'role'
+		| 'number'
+		| 'avatarUrl'
+		| 'averageRating'
+	>
 }
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never }>
@@ -297,17 +359,17 @@ export type RegisterMutationVariables = Exact<{
 }>
 
 export type RegisterMutation = { __typename?: 'Mutation' } & {
-	register: { __typename?: 'UserResponse' } & {
-		errors?: Maybe<
-			Array<{ __typename?: 'ErrorField' } & Pick<ErrorField, 'message'>>
-		>
-		user?: Maybe<
-			{ __typename?: 'User' } & Pick<
-				User,
-				'id' | 'name' | 'lastname' | 'email' | 'role' | 'number' | 'avatarUrl'
-			>
-		>
-	}
+	register: { __typename?: 'User' } & Pick<
+		User,
+		| 'id'
+		| 'name'
+		| 'lastname'
+		| 'email'
+		| 'role'
+		| 'number'
+		| 'avatarUrl'
+		| 'averageRating'
+	>
 }
 
 export type UpdateProductMutationVariables = Exact<{
@@ -337,6 +399,37 @@ export type GetAllFarmerOrdersQuery = { __typename?: 'Query' } & {
 				owner: { __typename?: 'User' } & Pick<
 					User,
 					'id' | 'name' | 'lastname' | 'number' | 'avatarUrl'
+				>
+			}
+	>
+}
+
+export type GetFarmerProductsQueryVariables = Exact<{
+	farmerId: Scalars['Int']
+}>
+
+export type GetFarmerProductsQuery = { __typename?: 'Query' } & {
+	getFarmerProducts: Array<
+		{ __typename?: 'Product' } & Pick<
+			Product,
+			'id' | 'label' | 'coast' | 'amount' | 'productImage'
+		>
+	>
+}
+
+export type GetFarmerReviewsQueryVariables = Exact<{
+	farmerId: Scalars['Int']
+}>
+
+export type GetFarmerReviewsQuery = { __typename?: 'Query' } & {
+	getFarmerReviews: Array<
+		{ __typename?: 'Review' } & Pick<
+			Review,
+			'id' | 'farmerId' | 'mark' | 'text'
+		> & {
+				owner: { __typename?: 'User' } & Pick<
+					User,
+					'id' | 'name' | 'lastname' | 'avatarUrl'
 				>
 			}
 	>
@@ -380,14 +473,25 @@ export type GetUserQueryVariables = Exact<{
 
 export type GetUserQuery = { __typename?: 'Query' } & {
 	getUser: { __typename?: 'UserResponse' } & {
-		user?: Maybe<
-			{ __typename?: 'User' } & Pick<
-				User,
-				'id' | 'name' | 'lastname' | 'number' | 'role' | 'avatarUrl'
-			>
+		user: { __typename?: 'User' } & Pick<
+			User,
+			| 'id'
+			| 'name'
+			| 'lastname'
+			| 'number'
+			| 'role'
+			| 'avatarUrl'
+			| 'averageRating'
 		>
-		errors?: Maybe<
-			Array<{ __typename?: 'ErrorField' } & Pick<ErrorField, 'message'>>
+		reviews?: Maybe<
+			Array<
+				{ __typename?: 'Review' } & Pick<Review, 'id' | 'text' | 'mark'> & {
+						owner: { __typename?: 'User' } & Pick<
+							User,
+							'id' | 'name' | 'lastname' | 'role' | 'avatarUrl'
+						>
+					}
+			>
 		>
 	}
 }
@@ -398,7 +502,14 @@ export type MeQuery = { __typename?: 'Query' } & {
 	me?: Maybe<
 		{ __typename?: 'User' } & Pick<
 			User,
-			'id' | 'email' | 'name' | 'lastname' | 'number' | 'avatarUrl' | 'role'
+			| 'id'
+			| 'email'
+			| 'name'
+			| 'lastname'
+			| 'number'
+			| 'avatarUrl'
+			| 'role'
+			| 'averageRating'
 		>
 	>
 }
@@ -506,6 +617,28 @@ export function useCreateProductMutation() {
 		CreateProductMutationVariables
 	>(CreateProductDocument)
 }
+export const CreateReviewDocument = gql`
+	mutation CreateReview($mark: Int!, $farmerId: Int!, $text: String) {
+		createReview(mark: $mark, farmerId: $farmerId, text: $text) {
+			id
+			owner {
+				id
+				name
+				lastname
+				avatarUrl
+			}
+			farmerId
+			text
+			mark
+		}
+	}
+`
+
+export function useCreateReviewMutation() {
+	return Urql.useMutation<CreateReviewMutation, CreateReviewMutationVariables>(
+		CreateReviewDocument
+	)
+}
 export const DeleteProductDocument = gql`
 	mutation DeleteProduct($productId: Int!) {
 		deleteProduct(productId: $productId)
@@ -518,21 +651,28 @@ export function useDeleteProductMutation() {
 		DeleteProductMutationVariables
 	>(DeleteProductDocument)
 }
+export const DeleteReviewDocument = gql`
+	mutation DeleteReview($reviewId: Int!, $farmerId: Int!) {
+		deleteReview(reviewId: $reviewId, farmerId: $farmerId)
+	}
+`
+
+export function useDeleteReviewMutation() {
+	return Urql.useMutation<DeleteReviewMutation, DeleteReviewMutationVariables>(
+		DeleteReviewDocument
+	)
+}
 export const LoginDocument = gql`
 	mutation Login($email: String!, $password: String!) {
 		login(options: { email: $email, password: $password }) {
-			errors {
-				message
-			}
-			user {
-				id
-				name
-				lastname
-				email
-				role
-				number
-				avatarUrl
-			}
+			id
+			name
+			lastname
+			email
+			role
+			number
+			avatarUrl
+			averageRating
 		}
 	}
 `
@@ -585,18 +725,14 @@ export const RegisterDocument = gql`
 				password: $password
 			}
 		) {
-			errors {
-				message
-			}
-			user {
-				id
-				name
-				lastname
-				email
-				role
-				number
-				avatarUrl
-			}
+			id
+			name
+			lastname
+			email
+			role
+			number
+			avatarUrl
+			averageRating
 		}
 	}
 `
@@ -656,6 +792,54 @@ export function useGetAllFarmerOrdersQuery(
 ) {
 	return Urql.useQuery<GetAllFarmerOrdersQuery>({
 		query: GetAllFarmerOrdersDocument,
+		...options
+	})
+}
+export const GetFarmerProductsDocument = gql`
+	query GetFarmerProducts($farmerId: Int!) {
+		getFarmerProducts(farmerId: $farmerId) {
+			id
+			label
+			coast
+			amount
+			productImage
+		}
+	}
+`
+
+export function useGetFarmerProductsQuery(
+	options: Omit<
+		Urql.UseQueryArgs<GetFarmerProductsQueryVariables>,
+		'query'
+	> = {}
+) {
+	return Urql.useQuery<GetFarmerProductsQuery>({
+		query: GetFarmerProductsDocument,
+		...options
+	})
+}
+export const GetFarmerReviewsDocument = gql`
+	query GetFarmerReviews($farmerId: Int!) {
+		getFarmerReviews(farmerId: $farmerId) {
+			id
+			owner {
+				id
+				name
+				lastname
+				avatarUrl
+			}
+			farmerId
+			mark
+			text
+		}
+	}
+`
+
+export function useGetFarmerReviewsQuery(
+	options: Omit<Urql.UseQueryArgs<GetFarmerReviewsQueryVariables>, 'query'> = {}
+) {
+	return Urql.useQuery<GetFarmerReviewsQuery>({
+		query: GetFarmerReviewsDocument,
 		...options
 	})
 }
@@ -723,9 +907,19 @@ export const GetUserDocument = gql`
 				number
 				role
 				avatarUrl
+				averageRating
 			}
-			errors {
-				message
+			reviews {
+				id
+				owner {
+					id
+					name
+					lastname
+					role
+					avatarUrl
+				}
+				text
+				mark
 			}
 		}
 	}
@@ -746,6 +940,7 @@ export const MeDocument = gql`
 			number
 			avatarUrl
 			role
+			averageRating
 		}
 	}
 `

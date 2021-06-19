@@ -1,0 +1,9 @@
+query GetFarmerProducts($farmerId: Int!) {
+	getFarmerProducts(farmerId: $farmerId) {
+		id
+		label
+		coast
+		amount
+		productImage
+	}
+}

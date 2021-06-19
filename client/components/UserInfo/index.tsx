@@ -1,3 +1,6 @@
+import Link from 'next/link'
+import Router from 'next/router'
+import { useState, FC } from 'react'
 import {
 	Flex,
 	Box,
@@ -7,9 +10,6 @@ import {
 	HStack,
 	Text
 } from '@chakra-ui/react'
-import Link from 'next/link'
-import { useState } from 'react'
-import { FC } from 'react'
 import isFarmer from '../../helpers/isFarmer'
 import role from '../../helpers/role'
 
@@ -20,10 +20,12 @@ interface UserInfoProps {
 		lastname: string
 		role: string
 		number: string
+		averageRating?: number
 	}
 	editable: boolean
+	canShowNumber: boolean
 }
-const UserInfo: FC<UserInfoProps> = ({ user, editable }) => {
+const UserInfo: FC<UserInfoProps> = ({ user, editable, canShowNumber }) => {
 	const [showNumber, setShowNumber] = useState<boolean>(false)
 	return (
 		<Flex justifyContent='center'>
@@ -62,14 +64,20 @@ const UserInfo: FC<UserInfoProps> = ({ user, editable }) => {
 							{showNumber || editable ? (
 								<Text>+7{user.number}</Text>
 							) : (
-								<Button onClick={() => setShowNumber(true)}>Показать</Button>
+								<Button
+									onClick={() => {
+										canShowNumber ? setShowNumber(true) : Router.push('/signin')
+									}}
+								>
+									Показать
+								</Button>
 							)}
 						</HStack>
 					</Box>
 				</Box>
 				<Box>
 					{isFarmer(user.role) && (
-						<HStack spacing='20px'>
+						<HStack spacing='20px' align='center'>
 							<Box textAlign='center'>
 								<Text fontSize='2xl' color='red'>
 									0
@@ -85,7 +93,7 @@ const UserInfo: FC<UserInfoProps> = ({ user, editable }) => {
 							</Box>
 							<Box textAlign='center'>
 								<Text fontSize='2xl' color='red'>
-									0
+									{user.averageRating?.toFixed(1)}
 								</Text>
 								<Text>рейтинг</Text>
 							</Box>

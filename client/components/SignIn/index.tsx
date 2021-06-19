@@ -39,13 +39,13 @@ const SignInForm: FC = () => {
 		const response = await signin(data)
 		console.log(response)
 
-		if (response.data?.login.user) {
+		if (response.data?.login.id) {
 			Router.push('/profile')
 		}
 
-		if (response.data?.login.errors?.length) {
+		if (response.error?.graphQLErrors.length) {
 			return toast({
-				title: response.data.login.errors[0].message,
+				title: response.error.graphQLErrors[0].message,
 				position: 'bottom-right',
 				status: 'error'
 			})

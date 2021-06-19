@@ -16,17 +16,13 @@ mutation Register(
 			password: $password
 		}
 	) {
-		errors {
-			message
-		}
-		user {
-			id
-			name
-			lastname
-			email
-			role
-			number
-			avatarUrl
-		}
+		id
+		name
+		lastname
+		email
+		role
+		number
+		avatarUrl
+		averageRating
 	}
 }

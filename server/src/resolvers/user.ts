@@ -11,7 +11,8 @@ import {
 	Resolver
 } from 'type-graphql'
 import argon2 from 'argon2'
-import { MyContext } from 'src/types'
+import { MyContext } from '../types'
+import { Review } from '../entities/Review'
 
 @InputType()
 class RegisterInput {
@@ -38,69 +39,50 @@ class LoginInput {
 }
 
 @ObjectType()
-class ErrorField {
-	@Field()
-	message: string
-}
-
-@ObjectType()
 class UserResponse {
-	@Field(() => [ErrorField], { nullable: true })
-	errors?: ErrorField[]
-	@Field(() => User, { nullable: true })
-	user?: User
+	@Field(() => User)
+	user!: User
+
+	@Field(() => [Review], { nullable: true })
+	reviews?: Review[]
 }
 
 @Resolver()
 export class UserResolver {
 	@Query(() => User, { nullable: true })
-	me(@Ctx() { req }: MyContext) {
+	async me(@Ctx() { req }: MyContext) {
 		if (!req.session.userId) {
 			return null
 		}
-		return User.findOne(req.session.userId)
+		let user = await User.findOne(req.session.userId)
+
+		if (!user) {
+			return null
+		}
+
+		return user
 	}
 
-	@Mutation(() => UserResponse)
+	@Mutation(() => User)
 	async register(
 		@Arg('options') options: RegisterInput,
 		@Ctx() { req }: MyContext
-	): Promise<UserResponse> {
-		let user
-		if (!options.email.includes('@') || options.email.length < 5) {
-			return {
-				errors: [
-					{
-						message: 'Некорректная почта'
-					}
-				]
-			}
-		}
-
-		if (options.password.length < 6) {
-			return {
-				errors: [
-					{
-						message: 'Пароль должен быть больше 6 символов'
-					}
-				]
-			}
-		}
-
-		if (options.password.length > 16) {
-			return {
-				errors: [
-					{
-						message: 'Пароль должен быть меньше 16 символов'
-					}
-				]
-			}
-		}
-
+	): Promise<User> {
 		try {
+			if (!options.email.includes('@') || options.email.length < 5) {
+				throw new Error('Некорректная почта')
+			}
+
+			if (options.password.length < 6) {
+				throw new Error('Пароль должен быть больше 6 символов')
+			}
+
+			if (options.password.length > 16) {
+				throw new Error('Пароль должен быть меньше 16 символов')
+			}
 			const hash = await argon2.hash(options.password)
 
-			user = await User.create({
+			const user = await User.create({
 				name: options.name,
 				lastname: options.lastname,
 				email: options.email,
@@ -108,55 +90,37 @@ export class UserResolver {
 				role: options.role,
 				hash
 			}).save()
+			req.session.userId = user?.id
+
+			return user
 		} catch (error) {
 			if (error.code === '23505') {
-				return {
-					errors: [
-						{
-							message: 'Такой пользователь уже существует'
-						}
-					]
-				}
+				throw new Error('Такой пользователь уже существует')
 			}
-		}
-
-		req.session.userId = user?.id
-
-		return {
-			user
+			throw error
 		}
 	}
 
-	@Mutation(() => UserResponse)
+	@Mutation(() => User)
 	async login(
 		@Arg('options') options: LoginInput,
 		@Ctx() { req }: MyContext
-	): Promise<UserResponse> {
-		const user = await User.findOne({ where: { email: options.email } })
-		if (!user) {
-			return {
-				errors: [
-					{
-						message: 'Такой пользователь не найден'
-					}
-				]
+	): Promise<User> {
+		try {
+			const user = await User.findOne({ where: { email: options.email } })
+			if (!user) {
+				throw new Error('Такой пользователь не найден')
 			}
-		}
-		const valid = await argon2.verify(user.hash, options.password)
-		if (!valid) {
-			return {
-				errors: [
-					{
-						message: 'Такой пользователь не найден'
-					}
-				]
+			const valid = await argon2.verify(user.hash, options.password)
+			if (!valid) {
+				throw new Error('Такой пользователь не найден')
 			}
-		}
 
-		req.session.userId = user.id
+			req.session.userId = user.id
 
-		return {
-			user
+			return user
+		} catch (error) {
+			throw error
 		}
 	}
 
@@ -177,18 +141,25 @@ export class UserResolver {
 
 	@Query(() => UserResponse)
 	async getUser(@Arg('id', () => Int) id: number): Promise<UserResponse> {
-		const user = await User.findOne({ id })
-		if (!user) {
-			return {
-				errors: [
-					{
-						message: 'Такой пользователь не найден'
-					}
-				]
+		try {
+			let user = await User.findOne(id)
+
+			if (!user) throw new Error('Пользователь не найден')
+
+			if (user.role === 'farmer') {
+				const reviews = await Review.find({
+					where: { farmerId: id },
+					relations: ['owner']
+				})
+				return {
+					user,
+					reviews
+				}
 			}
-		}
-		return {
-			user
+
+			return { user }
+		} catch (error) {
+			throw error
 		}
 	}
 }

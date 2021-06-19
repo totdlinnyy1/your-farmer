@@ -1,0 +1,14 @@
+mutation CreateReview($mark: Int!, $farmerId: Int!, $text: String) {
+	createReview(mark: $mark, farmerId: $farmerId, text: $text) {
+		id
+		owner {
+			id
+			name
+			lastname
+			avatarUrl
+		}
+		farmerId
+		text
+		mark
+	}
+}

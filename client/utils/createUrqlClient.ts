@@ -8,7 +8,11 @@ import {
 	MyProductsDocument,
 	CreateProductMutation,
 	MyProductsQuery,
-	DeleteProductMutation
+	DeleteProductMutation,
+	GetFarmerReviewsDocument,
+	GetFarmerReviewsQuery,
+	DeleteReviewMutation,
+	CreateReviewMutation
 } from '../generated/graphql'
 import { cacheExchange } from '@urql/exchange-graphcache'
 import { betterUpdateQuery } from './betterUpdateQuery'
@@ -48,11 +52,11 @@ export const createUrqlClient = (ssrExchange: any) => ({
 							},
 							_result,
 							(result, query) => {
-								if (result.login.errors) {
+								if (!result.login) {
 									return query
 								}
 								return {
-									me: result.login.user
+									me: result.login
 								}
 							}
 						)
@@ -65,11 +69,11 @@ export const createUrqlClient = (ssrExchange: any) => ({
 							},
 							_result,
 							(result, query) => {
-								if (result.register.errors) {
+								if (!result.register) {
 									return query
 								}
 								return {
-									me: result.register.user
+									me: result.register
 								}
 							}
 						)
@@ -84,6 +88,7 @@ export const createUrqlClient = (ssrExchange: any) => ({
 							// @ts-ignore
 							(result, query) => {
 								if (result.createProduct) {
+									result.createProduct['__typename'] = 'Product'
 									const myProducts = query.myProducts.push(result.createProduct)
 									return {
 										myProducts
@@ -105,6 +110,50 @@ export const createUrqlClient = (ssrExchange: any) => ({
 									return {
 										myProducts: query.myProducts.filter(
 											product => product.id !== args.productId
+										)
+									}
+								}
+								return query
+							}
+						)
+					},
+					createReview: (_result, args, cache, info) => {
+						console.log(_result, args, cache)
+						betterUpdateQuery<CreateReviewMutation, GetFarmerReviewsQuery>(
+							cache,
+							{
+								query: GetFarmerReviewsDocument,
+								variables: { farmerId: args.farmerId }
+							},
+							_result,
+							// @ts-ignore
+							(result, query) => {
+								if (result.createReview) {
+									result.createReview['__typename'] = 'Review'
+									const getFarmerReviews = query.getFarmerReviews.push(
+										result.createReview
+									)
+									return {
+										getFarmerReviews
+									}
+								}
+								return query
+							}
+						)
+					},
+					deleteReview: (_result, args, cache, info) => {
+						betterUpdateQuery<DeleteReviewMutation, GetFarmerReviewsQuery>(
+							cache,
+							{
+								query: GetFarmerReviewsDocument,
+								variables: { farmerId: args.farmerId }
+							},
+							_result,
+							(result, query) => {
+								if (result.deleteReview) {
+									return {
+										getFarmerReviews: query.getFarmerReviews.filter(
+											review => review.id !== args.reviewId
 										)
 									}
 								}

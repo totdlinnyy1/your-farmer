@@ -17,6 +17,9 @@ import MediaQuery, { useMediaQuery } from 'react-responsive'
 import { Layout } from '../modules'
 import { withUrqlClient } from 'next-urql'
 import { createUrqlClient } from '../utils/createUrqlClient'
+import logo from '../public/logo.png'
+import farmer from '../public/farmer.png'
+import buyer from '../public/buyer.png'
 
 const Home: NextPage = () => {
 	const isSmallerThan885 = useMediaQuery({ maxDeviceWidth: 885 })
@@ -84,7 +87,13 @@ const Home: NextPage = () => {
 					<MediaQuery minDeviceWidth={886}>
 						<WrapItem>
 							<Box>
-								<Image src='/logo.png' width={415} height={315} />
+								<Image
+									src={logo}
+									alt='logo'
+									placeholder='blur'
+									width={415}
+									height={315}
+								/>
 							</Box>
 						</WrapItem>
 					</MediaQuery>
@@ -93,7 +102,13 @@ const Home: NextPage = () => {
 				<Wrap spacing='30px' m='40px 0' align='center' justify='center'>
 					<WrapItem>
 						<Center maxWidth='420px' shadow='xl'>
-							<Image src='/farmer.png' width={400} height={400} />
+							<Image
+								src={farmer}
+								placeholder='blur'
+								alt='farmer'
+								width={400}
+								height={400}
+							/>
 						</Center>
 					</WrapItem>
 					<WrapItem>
@@ -130,7 +145,13 @@ const Home: NextPage = () => {
 					</WrapItem>
 					<WrapItem>
 						<Center maxWidth='420px' maxHeight='420' shadow='xl'>
-							<Image src='/buyer.png' width={400} height={300} />
+							<Image
+								src={buyer}
+								placeholder='blur'
+								alt='buyer'
+								width={400}
+								height={300}
+							/>
 						</Center>
 					</WrapItem>
 				</Wrap>

@@ -57,12 +57,12 @@ const SignUpForm: FC = () => {
 		delete data['rpassword']
 		delete data['access']
 		const response = await signup(data)
-		if (response.data?.register.user) {
+		if (response.data?.register.id) {
 			return Router.push('/profile')
 		}
-		if (response.data?.register.errors?.length) {
+		if (response.error?.graphQLErrors.length) {
 			return toast({
-				title: response.data.register.errors[0].message,
+				title: response.error.graphQLErrors[0].message,
 				position: 'bottom-right',
 				status: 'error'
 			})

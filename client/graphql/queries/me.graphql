@@ -7,5 +7,6 @@ query Me {
 		number
 		avatarUrl
 		role
+		averageRating
 	}
 }

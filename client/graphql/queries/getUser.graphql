@@ -7,9 +7,19 @@ query GetUser($id: Int!) {
 			number
 			role
 			avatarUrl
+			averageRating
 		}
-		errors {
-			message
+		reviews {
+			id
+			owner {
+				id
+				name
+				lastname
+				role
+				avatarUrl
+			}
+			text
+			mark
 		}
 	}
 }

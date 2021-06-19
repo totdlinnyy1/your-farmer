@@ -1,0 +1,14 @@
+query GetFarmerReviews($farmerId: Int!) {
+	getFarmerReviews(farmerId: $farmerId) {
+		id
+		owner {
+			id
+			name
+			lastname
+			avatarUrl
+		}
+		farmerId
+		mark
+		text
+	}
+}

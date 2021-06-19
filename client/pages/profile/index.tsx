@@ -12,7 +12,8 @@ import {
 	FarmerMap,
 	Layout,
 	FarmerOrders,
-	BuyerOrders
+	BuyerOrders,
+	Reviews
 } from '../../modules'
 import { createUrqlClient } from '../../utils/createUrqlClient'
 
@@ -31,13 +32,16 @@ const Profile: NextPage = () => {
 							lastname: data.me.lastname,
 							avatarUrl: data.me.avatarUrl as string | null,
 							role: data.me.role,
-							number: data.me.number
+							number: data.me.number,
+							averageRating: data.me.averageRating
 						}}
 						editable={true}
+						canShowNumber={true}
 					/>
 					{isFarmer(data.me.role) ? (
 						<Box>
 							<FarmerMap />
+							<Reviews farmerId={data.me.id} />
 							<CreateProduct />
 							<FarmerOrders />
 						</Box>

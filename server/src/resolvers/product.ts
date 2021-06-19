@@ -92,4 +92,18 @@ export class ProductResolver {
 		await Product.delete({ id: productId, ownerId: req.session.userId })
 		return true
 	}
+
+	@Query(() => [Product])
+	async getFarmerProducts(
+		@Arg('farmerId', () => Int) farmerId: number
+	): Promise<Product[]> {
+		try {
+			const products = await Product.find({ where: { ownerId: farmerId } })
+			if (!products) throw new Error('Продукты не найдены')
+
+			return products
+		} catch (error) {
+			throw error
+		}
+	}
 }

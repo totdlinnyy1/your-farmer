@@ -1,4 +1,5 @@
-import { Box, Button, Flex, VStack, Icon, Image, Text } from '@chakra-ui/react'
+import Image from 'next/image'
+import { Box, Button, Flex, VStack, Icon, Text } from '@chakra-ui/react'
 import { FC } from 'react'
 import { GiCow } from 'react-icons/gi'
 
@@ -33,7 +34,13 @@ const Product: FC<Props> = ({
 		>
 			<Flex h='200px' justifyContent='center' align='center' bgColor='gray.100'>
 				{productImage ? (
-					<Image src={productImage} w='100%' h='200px' objectFit='cover' />
+					<Image
+						src={productImage}
+						alt={label}
+						width={200}
+						height={200}
+						objectFit='cover'
+					/>
 				) : (
 					<VStack>
 						<Icon as={GiCow} boxSize='70px' color='white' />
