@@ -110,7 +110,7 @@ const SignInForm: FC = () => {
 				>
 					Войти
 				</Button>
-				<Link href='/'>
+				<Link href='/forgot-password'>
 					<a>
 						<Button variant='link'>Забыли пароль?</Button>
 					</a>

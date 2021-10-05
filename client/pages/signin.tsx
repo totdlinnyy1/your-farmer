@@ -1,12 +1,11 @@
 import { NextPage } from 'next'
 import { Layout } from '../modules'
 import { Box, Center, Container, Heading } from '@chakra-ui/react'
-import { Props } from 'next/dist/client/experimental-script'
 import { SignInForm } from '../components'
 import { withUrqlClient } from 'next-urql'
 import { createUrqlClient } from '../utils/createUrqlClient'
 
-const SignIn: NextPage<Props> = () => {
+const SignIn: NextPage = () => {
 	return (
 		<Layout title='Вход' loading={false}>
 			<Container>

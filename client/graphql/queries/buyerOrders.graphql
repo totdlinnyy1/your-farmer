@@ -1,0 +1,13 @@
+query BuyerOrders($ownerId: Int!) {
+	buyerOrders(ownerId: $ownerId) {
+		id
+		products {
+			label
+			count
+			amount
+		}
+		placemark {
+			address
+		}
+	}
+}

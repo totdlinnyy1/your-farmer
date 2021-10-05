@@ -1,0 +1,3 @@
+mutation DeleteFarmerOrder($orderId: Int!) {
+	deleteFarmerOrder(orderId: $orderId)
+}

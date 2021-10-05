@@ -14,7 +14,9 @@ const BuyerOrders: FC = () => {
 				Ваши заказы
 			</Text>
 			<Divider mt={4} />
-			<TableOrders fetching={fetching} orders={data} />
+			<Box w='100%' overflowX='scroll'>
+				<TableOrders fetching={fetching} orders={data} />
+			</Box>
 		</Box>
 	)
 }

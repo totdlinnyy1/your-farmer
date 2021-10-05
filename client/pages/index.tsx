@@ -23,7 +23,7 @@ import buyer from '../public/buyer.png'
 
 const Home: NextPage = () => {
 	const isSmallerThan885 = useMediaQuery({ maxDeviceWidth: 885 })
-
+	const isSmallerThan1112 = useMediaQuery({ maxDeviceWidth: 1112 })
 	return (
 		<Layout title='Главная' loading={false}>
 			<Container maxW='container.xl' bg='white'>
@@ -127,7 +127,13 @@ const Home: NextPage = () => {
 					</WrapItem>
 				</Wrap>
 				<Divider />
-				<Wrap spacing='30px' m='40px 0' align='center' justify='center'>
+				<Wrap
+					spacing='30px'
+					m='40px 0'
+					align='center'
+					justify='center'
+					direction={isSmallerThan1112 ? 'column-reverse' : undefined}
+				>
 					<WrapItem>
 						<Center maxWidth='650px'>
 							<Box>

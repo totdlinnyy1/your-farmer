@@ -1,4 +1,6 @@
 import { NextPage } from 'next'
+import Router from 'next/router'
+import { useEffect } from 'react'
 import { withUrqlClient } from 'next-urql'
 import { Container } from '@chakra-ui/react'
 import { useMeQuery } from '../generated/graphql'
@@ -11,8 +13,12 @@ const NewPage: NextPage = () => {
 	const [{ fetching, data }] = useMeQuery({
 		pause: isServer()
 	})
+	useEffect(() => {
+		if (!fetching && !data?.me && !isServer()) Router.push('/signin')
+	}, [fetching, data])
+
 	if (!data?.me) {
-		return <></>
+		return <Layout title={'Загрузка...'} loading={true}></Layout>
 	}
 
 	return (

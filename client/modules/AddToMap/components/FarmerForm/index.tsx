@@ -138,50 +138,52 @@ const FarmerForm: FC<Props> = ({ setPlacemarkToMap }) => {
 				</Stack>
 			) : (
 				<form onSubmit={handleSubmit(onSubmit)}>
-					<Table size='md'>
-						<Thead>
-							<Tr>
-								<Th>#</Th>
-								<Th>Продукт</Th>
-								<Th>Колличество</Th>
-								<Th>Цена</Th>
-							</Tr>
-						</Thead>
-						<Tbody>
-							{products.myProducts.map(product => (
-								<Tr key={product.id}>
-									<Th>
-										<input
-											ref={register(`${product.id}check`).ref}
-											type='checkbox'
-											onChange={e => handleActive(e, product.id)}
-										/>
-									</Th>
-									<Th>{product.label}</Th>
-									<Th>
-										<FormControl isInvalid={errors[product.id.toString()]}>
-											<InputGroup size='xs' w='100px' variant='filled'>
-												<Input
-													{...register(product.id.toString(), {
-														required: isProductActive.includes(product.id)
-													})}
-													as={InputMask}
-													mask='999'
-													maskChar=''
-													placeholder='Колличество'
-													disabled={!isProductActive.includes(product.id)}
-												/>
-												<InputRightAddon>
-													<Text>{product.amount}</Text>
-												</InputRightAddon>
-											</InputGroup>
-										</FormControl>
-									</Th>
-									<Th>{`${product.coast} р/${product.amount}`}</Th>
+					<Box w='100%' overflowX='scroll'>
+						<Table size='md' minW='430px'>
+							<Thead>
+								<Tr>
+									<Th>#</Th>
+									<Th>Продукт</Th>
+									<Th>Колличество</Th>
+									<Th>Цена</Th>
 								</Tr>
-							))}
-						</Tbody>
-					</Table>
+							</Thead>
+							<Tbody>
+								{products.myProducts.map(product => (
+									<Tr key={product.id}>
+										<Th>
+											<input
+												ref={register(`${product.id}check`).ref}
+												type='checkbox'
+												onChange={e => handleActive(e, product.id)}
+											/>
+										</Th>
+										<Th>{product.label}</Th>
+										<Th>
+											<FormControl isInvalid={errors[product.id.toString()]}>
+												<InputGroup size='xs' w='100px' variant='filled'>
+													<Input
+														{...register(product.id.toString(), {
+															required: isProductActive.includes(product.id)
+														})}
+														as={InputMask}
+														mask='999'
+														maskChar=''
+														placeholder='Колличество'
+														disabled={!isProductActive.includes(product.id)}
+													/>
+													<InputRightAddon>
+														<Text>{product.amount}</Text>
+													</InputRightAddon>
+												</InputGroup>
+											</FormControl>
+										</Th>
+										<Th>{`${product.coast} р/${product.amount}`}</Th>
+									</Tr>
+								))}
+							</Tbody>
+						</Table>
+					</Box>
 					<Box my={8}>
 						<FormLabel>Адрес:</FormLabel>
 						<HStack>

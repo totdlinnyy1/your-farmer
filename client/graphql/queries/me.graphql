@@ -8,5 +8,8 @@ query Me {
 		avatarUrl
 		role
 		averageRating
+		reviewsCount
+		productsCount
+		isEmailConfirmed
 	}
 }

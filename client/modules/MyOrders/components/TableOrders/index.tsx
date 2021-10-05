@@ -19,9 +19,13 @@ import {
 	Skeleton,
 	Button
 } from '@chakra-ui/react'
-import { FiEdit2, FiTrash } from 'react-icons/fi'
-import { BiHide } from 'react-icons/bi'
-import { GetMyOrdersQuery } from '../../../../generated/graphql'
+import { FiTrash } from 'react-icons/fi'
+import { BiHide, BiShow } from 'react-icons/bi'
+import {
+	GetMyOrdersQuery,
+	useChangeOrderStatusMutation,
+	useDeleteOrderMutation
+} from '../../../../generated/graphql'
 import status from '../../../../helpers/status'
 
 interface Props {
@@ -30,6 +34,9 @@ interface Props {
 }
 
 const TableOrders: FC<Props> = ({ orders, fetching }) => {
+	const [{ fetching: orderStatus }, changeOrderStatus] =
+		useChangeOrderStatusMutation()
+	const [, deleteOrder] = useDeleteOrderMutation()
 	return (
 		<Box w='100%' mt={10}>
 			{fetching ? (
@@ -48,7 +55,7 @@ const TableOrders: FC<Props> = ({ orders, fetching }) => {
 					</Stack>
 				</Box>
 			) : orders?.getMyOrders.length ? (
-				<Table>
+				<Table variant='striped' minW='763px'>
 					<Thead>
 						<Tr>
 							<Th>#</Th>
@@ -74,15 +81,27 @@ const TableOrders: FC<Props> = ({ orders, fetching }) => {
 								<Td>
 									<ButtonGroup>
 										<IconButton
-											aria-label='edit'
-											icon={<Icon as={FiEdit2} />}
+											aria-label='hide'
+											icon={
+												order.status === 'show' ? (
+													<Icon as={BiHide} />
+												) : (
+													<Icon as={BiShow} />
+												)
+											}
+											isLoading={orderStatus}
+											onClick={async () =>
+												await changeOrderStatus({ orderId: order.id })
+											}
 										/>
-										<IconButton aria-label='hide' icon={<Icon as={BiHide} />} />
 										<IconButton
 											aria-label='delete'
 											colorScheme='red'
 											variant='outline'
 											icon={<Icon as={FiTrash} />}
+											onClick={async () =>
+												await deleteOrder({ orderId: order.id })
+											}
 										/>
 									</ButtonGroup>
 								</Td>

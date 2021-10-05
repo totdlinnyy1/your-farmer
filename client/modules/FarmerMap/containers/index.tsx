@@ -14,6 +14,7 @@ import {
 	Td
 } from '@chakra-ui/react'
 import { FC, useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 import { MapComponent, OrdersList } from '../components'
 import { useGetAllOrdersQuery } from '../../../generated/graphql'
 import { MoreAboutOrderProps } from '../../../types/moreAboutOrder'
@@ -32,27 +33,35 @@ const FarmerMap: FC = () => {
 		setShowNumber(false)
 	}
 
+	const isSmallerThen993 = useMediaQuery({ maxDeviceWidth: 993 })
+
 	return (
 		<Box my='40px'>
 			<Text fontSize='3xl' textAlign='center' my='20px'>
 				Заказы покупателей
 			</Text>
-			<Flex h='600px' bg='gray.100' border='2px dashed red' borderRadius='4px'>
-				<Box w='70%'>
+			<Flex
+				h={isSmallerThen993 ? '1200px' : '600px'}
+				bg='gray.100'
+				border='2px dashed red'
+				borderRadius='4px'
+				flexDirection={isSmallerThen993 ? 'column' : undefined}
+			>
+				<Box w={isSmallerThen993 ? '100%' : '70%'} h='600px'>
 					<MapComponent
 						focusPlacemark={focusPlacemark}
 						setFocusOrder={setFocusOrder}
 						orders={data}
 					/>
 				</Box>
-				<Box w='30%' h='600px' py={3}>
+				<Box w={isSmallerThen993 ? '100%' : '30%'} h='600px' py={3}>
 					<Flex
 						justifyContent='space-between'
 						h='full'
 						w='full'
 						flexDirection='column'
 					>
-						<Box overflowY='scroll' height='90%'>
+						<Box>
 							<OrdersList
 								fetching={fetching}
 								orders={data}

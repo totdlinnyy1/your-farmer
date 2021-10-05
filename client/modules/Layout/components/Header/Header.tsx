@@ -117,7 +117,7 @@ const Header: FC = () => {
 							<Center w='260px'>
 								<Spinner />
 							</Center>
-						) : data?.me?.id ? (
+						) : data?.me ? (
 							<HStack>
 								<Link href='/profile'>
 									<a>
@@ -178,48 +178,47 @@ const Header: FC = () => {
 						</Flex>
 					</DrawerHeader>
 					<DrawerBody>
-						{/*<Box mb={10}>*/}
-						{/*  {user?.isLoggedIn ? (*/}
-						{/*    <VStack>*/}
-						{/*      <Link href='/profile'>*/}
-						{/*        <a>*/}
-						{/*          <Button size='lg' colorScheme='red'>*/}
-						{/*            Личный кабинет*/}
-						{/*          </Button>*/}
-						{/*        </a>*/}
-						{/*      </Link>*/}
-						{/*      <a*/}
-						{/*        onClick={async e => {*/}
-						{/*          e.preventDefault()*/}
-						{/*          setLoading(true)*/}
-						{/*          await mutateUser(fetchJson('/api/logout'))*/}
-						{/*        }}*/}
-						{/*      >*/}
-						{/*        <Button variant='link' isLoading={loading}>*/}
-						{/*          Выйти*/}
-						{/*        </Button>*/}
-						{/*      </a>*/}
-						{/*    </VStack>*/}
-						{/*  ) : (*/}
-						{/*    <VStack>*/}
-						{/*      <Link href='/signup'>*/}
-						{/*        <a>*/}
-						{/*          <Button size='lg' colorScheme='red'>*/}
-						{/*            Регистрация*/}
-						{/*          </Button>*/}
-						{/*        </a>*/}
-						{/*      </Link>*/}
-						{/*      <Link href='/signin'>*/}
-						{/*        <a>*/}
-						{/*          <Button size='lg'>Войти</Button>*/}
-						{/*        </a>*/}
-						{/*      </Link>*/}
-						{/*    </VStack>*/}
-						{/*  )}*/}
-						{/*</Box>*/}
+						<Box mb={10}>
+							{!fetching && data?.me ? (
+								<VStack>
+									<Link href='/profile'>
+										<a>
+											<Button size='lg' colorScheme='red'>
+												Личный кабинет
+											</Button>
+										</a>
+									</Link>
+									<Button
+										variant='link'
+										onClick={async () => {
+											await logout()
+										}}
+									>
+										Выйти
+									</Button>
+								</VStack>
+							) : (
+								<VStack>
+									<Link href='/signup'>
+										<a>
+											<Button size='lg' colorScheme='red'>
+												Регистрация
+											</Button>
+										</a>
+									</Link>
+									<Link href='/signin'>
+										<a>
+											<Button size='lg'>Войти</Button>
+										</a>
+									</Link>
+								</VStack>
+							)}
+						</Box>
 						<VStack>
 							<Link href='/'>
-								<Button variant='ghost'>Главная</Button>
+								<a>
+									<Button variant='ghost'>Главная</Button>
+								</a>
 							</Link>
 							<Button variant='ghost'>Продукты</Button>
 							<Button variant='ghost'>Фермеры</Button>

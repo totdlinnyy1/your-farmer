@@ -8,6 +8,8 @@ query GetUser($id: Int!) {
 			role
 			avatarUrl
 			averageRating
+			reviewsCount
+			productsCount
 		}
 		reviews {
 			id

@@ -26,3 +26,4 @@ export class Placemark {
 	@Field(() => [Float])
 	coordinates!: number[]
 }
+

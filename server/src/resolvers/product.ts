@@ -13,6 +13,7 @@ import {
 import { MyContext } from '../types'
 import { isAuth } from '../middleware/isAuth'
 import { getConnection } from 'typeorm'
+import { User } from '../entities/User'
 
 @InputType()
 class ProductInput {
@@ -38,10 +39,18 @@ export class ProductResolver {
 		@Arg('options') options: ProductInput,
 		@Ctx() { req }: MyContext
 	): Promise<Product> {
-		return Product.create({
-			...options,
-			ownerId: req.session.userId
-		}).save()
+		try {
+			const product = await Product.create({
+				...options,
+				ownerId: req.session.userId
+			}).save()
+			await getConnection()
+				.getRepository(User)
+				.increment({ id: req.session.userId }, 'productsCount', 1)
+			return product
+		} catch (error) {
+			throw error
+		}
 	}
 
 	@Query(() => [Product])
@@ -89,8 +98,15 @@ export class ProductResolver {
 		@Arg('productId', () => Int) productId: number,
 		@Ctx() { req }: MyContext
 	): Promise<boolean> {
-		await Product.delete({ id: productId, ownerId: req.session.userId })
-		return true
+		try {
+			await Product.delete({ id: productId, ownerId: req.session.userId })
+			await getConnection()
+				.getRepository(User)
+				.decrement({ id: req.session.userId }, 'productsCount', 1)
+			return true
+		} catch (error) {
+			throw error
+		}
 	}
 
 	@Query(() => [Product])

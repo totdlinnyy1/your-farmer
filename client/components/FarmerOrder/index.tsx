@@ -8,9 +8,8 @@ import {
 	Button,
 	OrderedList,
 	ListItem,
-	Tag,
-	TagLeftIcon,
-	TagLabel
+	Center,
+	Icon
 } from '@chakra-ui/react'
 import { FC } from 'react'
 import { MdPlace } from 'react-icons/md'
@@ -51,6 +50,7 @@ const FarmerOrder: FC<Props> = ({
 		<Box
 			bg='whiteAlpha.900'
 			w='97%'
+			maxW='500px'
 			p={2}
 			border={focusId === orderId ? '2px solid red' : undefined}
 			shadow={focusId === orderId ? 'xl' : 'md'}
@@ -82,10 +82,14 @@ const FarmerOrder: FC<Props> = ({
 				</Button>
 			</Flex>
 			<Box mb={3}>
-				<Tag>
-					<TagLeftIcon as={MdPlace} />
-					<TagLabel>{placemark.address}</TagLabel>
-				</Tag>
+				<HStack>
+					<Center bg='gray.200' borderRadius={4} w='30px' h='30px'>
+						<Icon as={MdPlace} />
+					</Center>
+					<Box>
+						<Text>{placemark.address}</Text>
+					</Box>
+				</HStack>
 			</Box>
 			<Box>
 				<Text>Продукты:</Text>

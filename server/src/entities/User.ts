@@ -55,6 +55,17 @@ export class User extends BaseEntity {
 	@Column('int', { default: 0 })
 	reviewsCount: number
 
+	@Field(() => Int)
+	@Column('int', { default: 0 })
+	productsCount: number
+
+	@Field(() => Boolean)
+	@Column('boolean', {default: false})
+	isEmailConfirmed: boolean
+
+	@Column('int', {default: 0})
+	confirmEmailCode: number
+
 	@Column()
 	hash!: string
 

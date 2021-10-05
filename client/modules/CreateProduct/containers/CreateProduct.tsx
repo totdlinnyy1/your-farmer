@@ -9,7 +9,9 @@ const CreateProduct: FC = () => {
 				Ваши продукты
 			</Text>
 			<Divider mt={4} />
-			<Products />
+			<Box h='900px' overflowY='scroll'>
+				<Products />
+			</Box>
 			<Divider mb={4} />
 			<CreateButton />
 		</Box>

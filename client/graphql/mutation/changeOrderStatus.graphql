@@ -1,0 +1,6 @@
+mutation ChangeOrderStatus($orderId: Int!) {
+	changeOrderStatus(orderId: $orderId) {
+		id
+		status
+	}
+}

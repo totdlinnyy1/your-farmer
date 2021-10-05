@@ -1,0 +1,14 @@
+mutation EditUser($name: String!, $lastname: String!, $number: String!) {
+	editUser(name: $name, lastname: $lastname, number: $number) {
+		id
+		email
+		name
+		lastname
+		number
+		avatarUrl
+		role
+		averageRating
+		reviewsCount
+		productsCount
+	}
+}

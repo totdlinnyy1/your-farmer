@@ -12,7 +12,15 @@ import {
 	GetFarmerReviewsDocument,
 	GetFarmerReviewsQuery,
 	DeleteReviewMutation,
-	CreateReviewMutation
+	CreateReviewMutation,
+	ChangeOrderStatusMutation,
+	GetMyOrdersQuery,
+	GetMyOrdersDocument,
+	ChangeFarmerOrderStatusMutation,
+	GetMyFarmerOrdersQuery,
+	GetMyFarmerOrdersDocument,
+	DeleteOrderMutation,
+	DeleteFarmerOrderMutation
 } from '../generated/graphql'
 import { cacheExchange } from '@urql/exchange-graphcache'
 import { betterUpdateQuery } from './betterUpdateQuery'
@@ -154,6 +162,96 @@ export const createUrqlClient = (ssrExchange: any) => ({
 									return {
 										getFarmerReviews: query.getFarmerReviews.filter(
 											review => review.id !== args.reviewId
+										)
+									}
+								}
+								return query
+							}
+						)
+					},
+					changeOrderStatus: (_result, args, cache, info) => {
+						betterUpdateQuery<ChangeOrderStatusMutation, GetMyOrdersQuery>(
+							cache,
+							{
+								query: GetMyOrdersDocument
+							},
+							_result,
+							// @ts-ignore
+							(result, query) => {
+								if (result.changeOrderStatus) {
+									return {
+										getMyOrders: query.getMyOrders.map(order => {
+											order.__typename = 'Order'
+											return order.id === args.orderId
+												? (order.status = result.changeOrderStatus.status)
+												: order.status
+										})
+									}
+								}
+								return query
+							}
+						)
+					},
+					changeFarmerOrderStatus: (_result, args, cache, info) => {
+						betterUpdateQuery<
+							ChangeFarmerOrderStatusMutation,
+							GetMyFarmerOrdersQuery
+						>(
+							cache,
+							{
+								query: GetMyFarmerOrdersDocument
+							},
+							_result,
+							// @ts-ignore
+							(result, query) => {
+								if (result.changeFarmerOrderStatus) {
+									return {
+										getMyFarmerOrders: query.getMyFarmerOrders.map(order => {
+											order.__typename = 'FarmerOrder'
+											return order.id === args.orderId
+												? (order.status = result.changeFarmerOrderStatus.status)
+												: order.status
+										})
+									}
+								}
+								return query
+							}
+						)
+					},
+					deleteOrder: (_result, args, cache, info) => {
+						betterUpdateQuery<DeleteOrderMutation, GetMyOrdersQuery>(
+							cache,
+							{
+								query: GetMyOrdersDocument
+							},
+							_result,
+							(result, query) => {
+								if (result.deleteOrder) {
+									return {
+										getMyOrders: query.getMyOrders.filter(
+											order => order.id !== args.orderId
+										)
+									}
+								}
+								return query
+							}
+						)
+					},
+					deleteFarmerOrder: (_result, args, cache, info) => {
+						betterUpdateQuery<
+							DeleteFarmerOrderMutation,
+							GetMyFarmerOrdersQuery
+						>(
+							cache,
+							{
+								query: GetMyFarmerOrdersDocument
+							},
+							_result,
+							(result, query) => {
+								if (result.deleteFarmerOrder) {
+									return {
+										getMyFarmerOrders: query.getMyFarmerOrders.filter(
+											order => order.id !== args.orderId
 										)
 									}
 								}

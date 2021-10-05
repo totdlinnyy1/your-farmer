@@ -6,12 +6,14 @@ import {
 	Field,
 	Float,
 	InputType,
+	Int,
 	Mutation,
 	Query,
 	Resolver,
 	UseMiddleware
 } from 'type-graphql'
 import { Order } from '../entities/Order'
+import { User } from '../entities/User'
 
 @InputType()
 class ProductsInput {
@@ -60,5 +62,70 @@ export class OrderResolver {
 	@UseMiddleware(isAuth)
 	async getMyOrders(@Ctx() { req }: MyContext): Promise<Order[]> {
 		return Order.find({ where: { ownerId: req.session.userId } })
+	}
+
+	@Mutation(() => Order)
+	@UseMiddleware(isAuth)
+	async changeOrderStatus(
+		@Arg('orderId', () => Int) orderId: number,
+		@Ctx() { req }: MyContext
+	): Promise<Order> {
+		try {
+			const order = await Order.findOne({
+				where: { id: orderId, ownerId: req.session.userId }
+			})
+
+			if (!order) throw new Error('Заказ не найден')
+
+			await Order.update(orderId, {
+				status: order.status === 'show' ? 'hide' : 'show'
+			})
+
+			const updatedOrder = await Order.findOne({
+				where: { id: orderId, ownerId: req.session.userId }
+			})
+
+			if (!updatedOrder) throw new Error('Заказ не найден')
+
+			return updatedOrder
+		} catch (error) {
+			throw error
+		}
+	}
+
+	@Mutation(() => Boolean)
+	@UseMiddleware(isAuth)
+	async deleteOrder(
+		@Arg('orderId', () => Int) orderId: number,
+		@Ctx() { req }: MyContext
+	): Promise<Boolean> {
+		try {
+			const order = await Order.findOne({
+				where: { id: orderId, ownerId: req.session.userId }
+			})
+
+			if (!order) throw new Error('Заказ не найден')
+
+			await Order.delete(orderId)
+
+			return true
+		} catch (error) {
+			throw error
+		}
+	}
+
+	@Query(() => [Order])
+	async buyerOrders(
+		@Arg('ownerId', () => Int) ownerId: number
+	): Promise<Order[]> {
+		try {
+			const user = await User.findOne({ where: { id: ownerId, role: 'buyer' } })
+			if (!user) throw new Error('Пользователь не найден')
+			const orders = await Order.find({ where: { ownerId } })
+			if (!orders) return []
+			return orders
+		} catch (error) {
+			throw error
+		}
 	}
 }

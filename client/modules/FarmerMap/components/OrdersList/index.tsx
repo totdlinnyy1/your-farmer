@@ -34,6 +34,7 @@ const OrdersList: FC<Props> = ({
 				) : (
 					orders?.getAllOrders.map(order => (
 						<Order
+							key={order.id}
 							owner={order.owner}
 							orderId={order.id}
 							products={order.products as OrderProduct[]}

@@ -1,7 +1,8 @@
+import { useEffect } from 'react'
 import { Box, Container } from '@chakra-ui/react'
 import { NextPage } from 'next'
-import Router from 'next/router'
 import { withUrqlClient } from 'next-urql'
+import Router from 'next/router'
 import UserInfo from '../../components/UserInfo'
 import { useMeQuery } from '../../generated/graphql'
 import isFarmer from '../../helpers/isFarmer'
@@ -11,8 +12,8 @@ import {
 	CreateProduct,
 	FarmerMap,
 	Layout,
-	FarmerOrders,
-	BuyerOrders,
+	MyBuyerOrders,
+	MyFarmerOrders,
 	Reviews
 } from '../../modules'
 import { createUrqlClient } from '../../utils/createUrqlClient'
@@ -21,38 +22,31 @@ const Profile: NextPage = () => {
 	const [{ fetching, data }] = useMeQuery({
 		pause: isServer()
 	})
-	if (!fetching && !data?.me && !isServer()) Router.push('/signin')
+	useEffect(() => {
+		if (!fetching && !data?.me && !isServer()) Router.push('/signin')
+	}, [fetching, data])
+
+	if (!data?.me) {
+		return <Layout title='Загрузка...' loading={true}></Layout>
+	}
 	return (
 		<Layout title='Профиль' loading={fetching}>
-			{data?.me && (
-				<Container maxW='container.xl' py={4} bg='white'>
-					<UserInfo
-						user={{
-							name: data.me.name,
-							lastname: data.me.lastname,
-							avatarUrl: data.me.avatarUrl as string | null,
-							role: data.me.role,
-							number: data.me.number,
-							averageRating: data.me.averageRating
-						}}
-						editable={true}
-						canShowNumber={true}
-					/>
-					{isFarmer(data.me.role) ? (
-						<Box>
-							<FarmerMap />
-							<Reviews farmerId={data.me.id} />
-							<CreateProduct />
-							<FarmerOrders />
-						</Box>
-					) : (
-						<Box>
-							<BuyerMap />
-							<BuyerOrders />
-						</Box>
-					)}
-				</Container>
-			)}
+			<Container maxW='container.xl' py={4} bg='white'>
+				<UserInfo user={data.me} editable={true} canShowNumber={true} />
+				{isFarmer(data.me.role) ? (
+					<Box>
+						<FarmerMap />
+						<Reviews farmerId={data.me.id} />
+						<CreateProduct />
+						<MyFarmerOrders />
+					</Box>
+				) : (
+					<Box>
+						<BuyerMap />
+						<MyBuyerOrders />
+					</Box>
+				)}
+			</Container>
 		</Layout>
 	)
 }

@@ -1,24 +1,26 @@
 import nodemailer from 'nodemailer'
 
 export async function sendEmail(to: string, html: string) {
-	let transporter = nodemailer.createTransport({
-		host: 'smtp.ethereal.email',
-		port: 587,
-		secure: false,
-		auth: {
-			user: 'x4s43akpjpc55xtz@ethereal.email',
-			pass: '8Z9sfqGTaUmRHD87hw'
-		}
-	})
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.jino.ru',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'noreply@my-farmer-dev.ru',
+      pass: '7Vf(JxjB&#Fa'
+    }
+  })
 
-	let info = await transporter.sendMail({
-		from: '"Fred Foo 👻" <foo@example.com>',
-		to,
-		subject: 'Подтвердите почту',
-		html
-	})
+  try {
+    await transporter.sendMail({
+      from: '"Твой фермер!" <noreply@my-farmer-dev.ru>',
+      to,
+      subject: 'Подтвердите, пржалуйста, почту',
+      html
+    })
+  } catch (e) {
+    console.log(e)
+  }
 
-	console.log('Message sent: %s', info.messageId)
 
-	console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
 }

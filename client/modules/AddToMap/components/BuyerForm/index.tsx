@@ -1,27 +1,28 @@
-import { FC, useState } from 'react'
-import Router from 'next/router'
 import {
 	Box,
+	Button,
+	Center,
 	Flex,
+	FormControl,
+	FormLabel,
 	HStack,
 	Input,
 	InputGroup,
 	InputLeftAddon,
+	InputRightAddon,
 	Text,
-	FormLabel,
-	Button,
-	useToast,
-	Center,
-	FormControl
+	useToast
 } from '@chakra-ui/react'
+import Router from 'next/router'
+import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SelectProduct from '../../../../components/SelectProducts'
-import { placemark } from '../../../../types/placemark'
-import getCoordinates from '../../../../helpers/getCoordinates'
 import {
 	ProductsInput,
 	useCreateOrderMutation
 } from '../../../../generated/graphql'
+import getCoordinates from '../../../../helpers/getCoordinates'
+import { placemark } from '../../../../types/placemark'
 
 interface Product {
 	label: string
@@ -112,18 +113,18 @@ const BuyerForm: FC<Props> = ({ setPlacemarkToMap }) => {
 					disabled={isSubmitting}
 					value={products}
 				/>
-				<Flex minH='200px' my={5} shadow='md' p={2} wrap='wrap'>
-					{products ? (
-						products.map((product, key) => (
-							<Box key={key} m={2}>
+				{products ? (
+					<Flex minH='200px' w='100%' shadow='md' flexWrap='wrap' p={2}>
+						{products.map((product, key) => (
+							<Box key={key} h='32px' m={2}>
 								<FormControl isInvalid={errors[product.value]}>
 									<InputGroup size='sm'>
 										<InputLeftAddon>
 											<Text>{product.label}</Text>
 										</InputLeftAddon>
 										<Input
-											placeholder='Количество'
 											w='60px'
+											placeholder='Количество'
 											bgColor='white'
 											maxLength={4}
 											disabled={isSubmitting}
@@ -158,16 +159,17 @@ const BuyerForm: FC<Props> = ({ setPlacemarkToMap }) => {
 												}
 											})}
 										/>
+										<InputRightAddon>{product.amount}</InputRightAddon>
 									</InputGroup>
 								</FormControl>
 							</Box>
-						))
-					) : (
-						<Center h='200px' w='100%'>
-							<Text>Выберете продукты</Text>
-						</Center>
-					)}
-				</Flex>
+						))}
+					</Flex>
+				) : (
+					<Center h='200px' w='100%' shadow='md'>
+						<Text>Выберете продукты</Text>
+					</Center>
+				)}
 				<Box my={8}>
 					<FormLabel>Адрес:</FormLabel>
 					<HStack>

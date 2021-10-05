@@ -1,24 +1,13 @@
-query GetAllFarmerOrders {
-	getAllFarmerOrders {
+query FarmerOrders($ownerId: Int!) {
+	farmerOrders(ownerId: $ownerId) {
 		id
-		ownerId
 		products {
 			label
-			class
-			amount
-			coast
 			count
+			amount
 		}
 		placemark {
 			address
-			coordinates
-		}
-		owner {
-			id
-			name
-			lastname
-			number
-			avatarUrl
 		}
 	}
 }

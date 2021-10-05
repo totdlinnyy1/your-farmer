@@ -8,5 +8,7 @@ mutation Login($email: String!, $password: String!) {
 		number
 		avatarUrl
 		averageRating
+		reviewsCount
+		productsCount
 	}
 }

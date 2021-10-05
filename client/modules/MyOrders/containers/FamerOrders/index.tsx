@@ -14,7 +14,9 @@ const FarmerOrders: FC = () => {
 				Ваши продукты выставленные на карту
 			</Text>
 			<Divider mt={4} />
-			<TableFarmerOrders fetching={fetching} orders={data} />
+			<Box w='100%' overflowX='scroll'>
+				<TableFarmerOrders fetching={fetching} orders={data} />
+			</Box>
 		</Box>
 	)
 }
