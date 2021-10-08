@@ -197,7 +197,7 @@ export class UserResolver {
       await User.update(req.session.userId!, { confirmEmailCode });
       await sendEmail(
         user!.email,
-        `<a href="localhost:3000/confirm_email?userId=${user!.id.toString()}&code=${user!.confirmEmailCode.toString()}">Подтвердите поту нажав на эту ссылку!</a>`
+        `<a href="http://localhost:3000/confirm-email?id=${user!.id.toString()}&code=${confirmEmailCode.toString()}">Подтвердите почту нажав на эту ссылку!</a>`
       );
       return true;
     } catch (e) {

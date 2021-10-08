@@ -1,0 +1,3 @@
+mutation ConfirmEmail($id: Int!, $code: Int!) {
+  confirmEmail(id: $id, code: $code)
+}
